@@ -7,11 +7,9 @@ body {
   height: 100vh;
 }
 
-
 h1{
     color:blanchedalmond;
-    margin-bottom: 64px;
-    
+    margin-bottom: 64px;    
 }
 
 .calc{
@@ -38,7 +36,7 @@ h1{
     padding:12px;
     font-size: 64px;
     height: 150px;
-    margin-bottom: 32px;
+    margin-bottom: 24px;
 }
 
 .button{
@@ -65,24 +63,48 @@ h1{
     margin: 6px;
 }
 
+.button_zero{
+   /*  flex-grow: 1; */
+    font-family: 'JetBrainsMono Nerd Font', monospace;
+    height:70px;
+    width: 162px;
+    background-color: #526c9d;
+    color: white;
+    font-size: 36px;
+    border:1,5px;
+    border-radius: 6px;
+    margin: 6px;
+
+}
+
+
+/* .btn_del{
+    font-size: 2px;
+} */
+
+.button_equal{
+    flex-grow: 1;
+}
+
+.buttons_container{
+    display: flex;
+    width: 425px;
+    justify-content: center;
+    
+}
 
 .container{
     display: flex;
-    flex-direction: column;
     flex-wrap: wrap;
+    height: 425px;
+    width: 270px;
     justify-content: center;
-    align-items: center;
-
-    margin:auto;
-    height: 390px;
-    width: auto;
 }
 
-.container_R{
-    height: 465,60px;
-    width: 285px;
+.container_r{
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+    margin-bottom: 2px;
 }
 
-btn_del{
-    font-size: 2px;
-}
