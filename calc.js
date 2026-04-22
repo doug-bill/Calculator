@@ -1,3 +1,5 @@
+// -------------VISUALS -----------------
+
 const body = document.querySelector("body");
 
 const calc = document.createElement("div");
@@ -21,17 +23,17 @@ calc.appendChild(screenBox);
 
     const btn_del = document.createElement("button")
     btn_del.classList.add("button")
-    btn_del.textContent = "Del";
+    btn_del.textContent = "C";
     btn_horizontal.appendChild(btn_del);
 
     const btn_divide = document.createElement("button");
     btn_divide.classList.add("button");
-    btn_divide.textContent = "÷";
+    btn_divide.textContent = "/";
     btn_horizontal.appendChild(btn_divide);
 
     const btn_multi = document.createElement("button");
     btn_multi.classList.add("button");
-    btn_multi.textContent = "x";
+    btn_multi.textContent = "*";
     btn_horizontal.appendChild(btn_multi);
 
     const btn_7 = document.createElement("button")
@@ -80,7 +82,7 @@ calc.appendChild(screenBox);
     btn_horizontal.appendChild(btn_3);
 
     const btn_0 = document.createElement("button")
-    btn_0.classList.add("button_zero")
+    btn_0.classList.add("button","button_zero")
     btn_0.textContent = "0";
     btn_horizontal.appendChild(btn_0);
 
@@ -92,25 +94,117 @@ calc.appendChild(screenBox);
     const btn_vertical = document.createElement("div");
     btn_vertical.classList.add("container_r");
     container.appendChild(btn_vertical);
- 
-    const btn_plus = document.createElement("button");
-    btn_plus.classList.add("button");
-    btn_plus.textContent = "+";
-    btn_vertical.appendChild(btn_plus);
 
     const btn_minus = document.createElement("button");
     btn_minus.classList.add("button");
     btn_minus.textContent = "-";
     btn_vertical.appendChild(btn_minus);
 
-     const btn_pa = document.createElement("button")
-    btn_pa.classList.add("button")
-    btn_pa.textContent = "()";
-    btn_vertical.appendChild(btn_pa);
+
+    const btn_plus = document.createElement("button");
+    btn_plus.classList.add( "button","button_plus");
+    btn_plus.textContent = "+";
+    btn_vertical.appendChild(btn_plus);
+
+    // const btn_pa = document.createElement("button")
+    // btn_pa.classList.add("button")
+    // btn_pa.textContent = "()";
+    // btn_vertical.appendChild(btn_pa);
    
     const btn_equal = document.createElement("button");
-    btn_equal.classList.add("button_equal");
+    btn_equal.classList.add("button","button_equal");
     btn_equal.textContent = "=";
     btn_vertical.appendChild(btn_equal);
 
+//-------------------------------------------------------------
 
+// Logic
+const ops = {
+    '+': (a,b) => a + b,
+    '-': (a,b) => a - b,
+    '*': (a,b) => a * b,
+    '/': (a,b) => b === 0 ? 'Error': a / b 
+}; 
+
+let calculus = {
+    displayValue:'0',
+    firstNumber: null,
+    operator: null,
+    WaitingForSecond: false,
+    DoneCalculating: false,
+};
+
+function render (){
+    screenBox.textContent = calculus.displayValue;
+}
+
+function pressDigit(d){
+    if (calculus.WaitingForSecond){
+        calculus.displayValue = d;
+        calculus.WaitingForSecond = false;
+    } else {
+     calculus.displayValue = calculus.displayValue ==='0'
+     ? d
+     : calculus.displayValue.length < 10
+        ? calculus.displayValue + d
+        : calculus.displayValue;
+    }
+    render();
+}
+
+function pressOp(op) {
+    calculus.firstNumber = parseFloat(calculus.displayValue);
+    calculus.operator = op;
+    calculus.WaitingForSecond = true;
+    render();
+}
+
+function equation(){
+    const { firstNumber, operator, displayValue} = calculus;
+    if (!operator || firstNumber === null) return;
+    const b = parseFloat(displayValue);
+    const result = ops [operator] ?.(firstNumber, b);
+    calculus.displayValue = result === 'Error' ? 'Error' : String(parseFloat(result.toFixed(10)));
+    calculus.firstNumber = null;
+    calculus.operator = null;
+    render();
+    DoneCalculating = true;
+}
+
+function cls() {
+    calculus.displayValue = '0';
+    calculus.firstNumber = null;
+    calculus.operator = null;
+    calculus.WaitingForSecond = false;
+    calculus.DoneCalculating = false;
+    render();
+}
+
+  container.addEventListener("click", (event) =>{
+
+    if(!event.target.classList.contains("button")) return;  
+    let btn = event.target.textContent;
+
+    console.log(calculus.displayValue + btn);
+        if (btn == "C"){
+            cls();
+            btn = '0';
+        } 
+            else if (btn == '/' || btn == '+' || btn == '-' || btn == '*' ){
+            pressOp(btn);
+            screenBox.textContent = calculus.displayValue + calculus.operator;
+            }
+            else if (btn == '='){
+            equation();
+            }
+                else if (!calculus.firstNumber == '0'){
+                pressDigit(btn);
+                screenBox.textContent = calculus.firstNumber + calculus.operator + btn;
+            }
+            else {
+                pressDigit(btn);
+            }
+})        
+
+/* Todo to erase the state after the first equation, so the number on the display
+is not considered with the next */
